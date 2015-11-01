@@ -4,6 +4,7 @@ import requests
 import datetime
 import time
 import configparser
+import random
 
 from imgurpython import ImgurClient
 from imgurpython.helpers.error import ImgurClientError
@@ -91,8 +92,11 @@ class looper(threading.Thread):
         self.loop()
 
     def loop(self):
-        for background in os.listdir(DIRECTORY):
-            self.set_background(DIRECTORY + background)
+        while True:
+            backgrounds = os.listdir(DIRECTORY)
+            if backgrounds:
+                background = random.choice(backgrounds)
+                self.set_background(DIRECTORY + background)
             time.sleep(SLEEP_TIME_IN_SEC_LOOP)
 
     def set_background(self, file_name):
