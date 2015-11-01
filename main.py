@@ -44,7 +44,7 @@ class getter(threading.Thread):
 
     def setup_connection(self):
         config = configparser.ConfigParser()
-        config.read('mauth.ini')
+        config.read('auth.ini')
         client_id = config.get('CREDENTIALS', 'client_id')
         client_secret = config.get('CREDENTIALS', 'client_secret')
         client = ImgurClient(client_id, client_secret)
