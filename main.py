@@ -102,6 +102,9 @@ class looper(threading.Thread):
 
 def main():
 
+    if not os.path.exists(DIRECTORY):
+        os.mkdir(DIRECTORY)
+
     # thread looping on background
     looper().start()
     # thread download images
