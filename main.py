@@ -37,8 +37,9 @@ class getter(threading.Thread):
         page = 0
         while True:
             items = self.get_items(client, SUBREDDIT_GALLERY_NAME, page)
-            self.save_images(items)
-            page += 1
+            if items:
+                self.save_images(items)
+                page += 1
             time.sleep(SLEEP_TIME_IN_SEC_GETR)
 
     def setup_connection(self):
@@ -61,27 +62,25 @@ class getter(threading.Thread):
             write_log(e.error_message)
 
     def save_images(self, items):
+        for item in items:
+            file_name = item.link.split('/')[-1]
+            full_path = DIRECTORY + file_name
 
-        if items:
-            for item in items:
-                file_name = item.link.split('/')[-1]
-                full_path = DIRECTORY + file_name
+            # check if the file already exists
+            if os.path.isfile(full_path):
+                continue
 
-                # check if the file already exists
-                if os.path.isfile(full_path):
-                    continue
-
+            try:
+                # get the file and save it
+                r = requests.get(item.link)
                 try:
-                    # get the file and save it
-                    r = requests.get(item.link)
-                    try:
-                        with open(full_path, 'wb') as output:
-                            # print('Saving: ', full_path)
-                            output.write(r.content)
-                    except Exception as e:
-                        write_log(e)
+                    with open(full_path, 'wb') as output:
+                        # print('Saving: ', full_path)
+                        output.write(r.content)
                 except Exception as e:
                     write_log(e)
+            except Exception as e:
+                write_log(e)
 
 
 class looper(threading.Thread):
