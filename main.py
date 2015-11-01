@@ -43,7 +43,7 @@ class getter(threading.Thread):
 
     def setup_connection(self):
         config = configparser.ConfigParser()
-        config.read('auth.ini')
+        config.read('mauth.ini')
         client_id = config.get('CREDENTIALS', 'client_id')
         client_secret = config.get('CREDENTIALS', 'client_secret')
         client = ImgurClient(client_id, client_secret)
@@ -61,25 +61,27 @@ class getter(threading.Thread):
             write_log(e.error_message)
 
     def save_images(self, items):
-        for item in items:
-            file_name = item.link.split('/')[-1]
-            full_path = DIRECTORY + file_name
 
-            # check if the file already exists
-            if os.path.isfile(full_path):
-                continue
+        if items:
+            for item in items:
+                file_name = item.link.split('/')[-1]
+                full_path = DIRECTORY + file_name
 
-            try:
-                # get the file and save it
-                r = requests.get(item.link)
+                # check if the file already exists
+                if os.path.isfile(full_path):
+                    continue
+
                 try:
-                    with open(full_path, 'wb') as output:
-                        # print('Saving: ', full_path)
-                        output.write(r.content)
+                    # get the file and save it
+                    r = requests.get(item.link)
+                    try:
+                        with open(full_path, 'wb') as output:
+                            # print('Saving: ', full_path)
+                            output.write(r.content)
+                    except Exception as e:
+                        write_log(e)
                 except Exception as e:
                     write_log(e)
-            except Exception as e:
-                write_log(e)
 
 
 class looper(threading.Thread):
