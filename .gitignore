@@ -64,3 +64,6 @@ venv/
 
 #private authentication
 mauth.ini
+
+#error log
+log.txt
