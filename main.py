@@ -25,7 +25,9 @@ def write_log(entry):
         with open(LOG_FILE, 'a') as output:
             output.write(
                 str(datetime.datetime.now()) +
-                entry)
+                ': ' +
+                entry +
+                '\n')
     except Exception:
         pass
 
@@ -44,7 +46,7 @@ class getter(threading.Thread):
 
     def setup_connection(self):
         config = configparser.ConfigParser()
-        config.read('auth.ini')
+        config.read('mauth.ini')
         client_id = config.get('CREDENTIALS', 'client_id')
         client_secret = config.get('CREDENTIALS', 'client_secret')
         client = ImgurClient(client_id, client_secret)
