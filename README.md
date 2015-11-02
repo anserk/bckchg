@@ -16,5 +16,5 @@ RUN
 To start just run
 ```
     pip install -r requirements.txt
-    python bckgrd.py
+    python main.py
 ```
