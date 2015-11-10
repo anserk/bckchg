@@ -1,3 +1,5 @@
+
+import sys
 import os
 import threading
 import requests
@@ -9,8 +11,8 @@ import random
 from imgurpython import ImgurClient
 from imgurpython.helpers.error import ImgurClientError
 
-
-DIRECTORY = os.getcwd() + os.sep + 'images' + os.sep
+ABS_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
+DIRECTORY = ABS_PATH + os.sep + 'images' + os.sep
 
 CMD = 'gsettings set org.gnome.desktop.background picture-uri file://'
 
@@ -47,7 +49,7 @@ class getter(threading.Thread):
 
     def setup_connection(self):
         config = configparser.ConfigParser()
-        config.read('auth.ini')
+        config.read(ABS_PATH + os.sep + 'auth.ini')
         client_id = config.get('CREDENTIALS', 'client_id')
         client_secret = config.get('CREDENTIALS', 'client_secret')
         client = ImgurClient(client_id, client_secret)
